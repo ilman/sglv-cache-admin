@@ -1,0 +1,79 @@
+<?php namespace Scienceguard\SglvCacheAdmin;
+
+use Illuminate\Support\ServiceProvider;
+
+class SglvCacheAdminServiceProvider extends ServiceProvider {
+
+	/**
+	 * Indicates if loading of the provider is deferred.
+	 *
+	 * @var bool
+	 */
+	protected $defer = false;
+
+	/**
+    * Include some specific files from the src-root.
+    *
+    * @return void
+    */
+	private function loadIncludes($files, $param='include')
+	{
+		// Run through $filesToLoad array.
+		foreach ($files as $file) {
+			// Add needed database structure and file extension.
+			$file = __DIR__ . '/../../' . $file . '.php';
+			// If file exists, include.
+			if (is_file($file) && file_exists($file)){
+				if($param=='require'){
+					require_once($file);
+				}
+				else{
+					include($file);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Bootstrap the application events.
+	 *
+	 * @return void
+	 */
+	public function boot()
+	{
+		$this->package('scienceguard/sglv-cache-admin');
+
+		// include files using require function
+		// $files = array(
+		// 	'form_rules',
+		// );
+		// $this->loadIncludes($files, 'require');
+
+		// include files using include function
+		$files = array(
+			'routes',
+		);
+		$this->loadIncludes($files, 'include');
+	}
+
+	/**
+	 * Register the service provider.
+	 *
+	 * @return void
+	 */
+	public function register()
+	{
+		//
+	}
+
+	/**
+	 * Get the services provided by the provider.
+	 *
+	 * @return array
+	 */
+	public function provides()
+	{
+		return array();
+	}
+
+}
